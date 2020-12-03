@@ -3,7 +3,7 @@ package common
 import java.nio.file.Paths
 
 import cats.Show
-import cats.effect.{Blocker, ExitCode, IO, IOApp, Resource}
+import cats.effect.{Blocker, ExitCode, IO, IOApp}
 import fs2.{Stream, io}
 
 abstract class App[O: Show] extends IOApp {

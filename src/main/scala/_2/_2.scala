@@ -21,4 +21,3 @@ object _2 extends App[Int] with StreamUtils {
     count == 1
   }
 }
-
