@@ -35,6 +35,8 @@ object _2 extends App[Int] with StreamUtils {
             case ("cid",v) => true
             case _ => false
           }
-      }).fold(0)((c, b) => if(b) c + 1 else c)
+      }).fold(0){ case (count, b) =>
+        if(b) count + 1 else count
+      }
   }
 }

@@ -13,6 +13,8 @@ object _1 extends App[Int] with StreamUtils {
       .flatMap(_.map{ s =>
           val passports = s.split(" ")
           passports.size == 8 || (passports.size == 7 && !passports.exists(_.split(":")(0) == "cid"))
-      }).fold(0)((c, b) => if(b) c + 1 else c)
+      }).fold(0){ case (count, b) =>
+        if(b) count + 1 else count
+      }
   }
 }

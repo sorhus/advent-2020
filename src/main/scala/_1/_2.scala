@@ -10,7 +10,9 @@ object _2 extends App[Int] with StreamUtils {
     val lines = input.through(toInt)
     lines.zipWithIndex.flatMap { case (x, i) =>
       lines.zipWithIndex.drop(i + 1).flatMap { case (y, j) =>
-        lines.drop(j + 1).filter(_ + x + y == 2020).map(_ * x * y)
+        lines.drop(j + 1)
+          .filter(_ + x + y == 2020)
+          .map(_ * x * y)
       }
     }
   }

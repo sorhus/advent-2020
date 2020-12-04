@@ -9,15 +9,14 @@ object _2 extends App[Int] with StreamUtils {
   override def process(input: Stream[IO, Byte]): Stream[IO, Int] = {
     input.through(toString)
       .map(Line.apply)
-      .filter(valid)
-      .map(_ => 1)
-      .reduce(_ + _)
+      .fold(0){ case(count, line) =>
+        if(valid(line)) count + 1 else count
+      }
   }
 
   def valid(line: Line): Boolean = {
-    val count = List(line.min, line.max)
+    List(line.min, line.max)
       .map(i => line.password.charAt(i - 1))
-      .count(_ == line.char)
-    count == 1
+      .count(_ == line.char) == 1
   }
 }
