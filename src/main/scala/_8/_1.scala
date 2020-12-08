@@ -4,15 +4,17 @@ import cats.effect.IO
 import common.{App, StreamUtils}
 import fs2.Stream
 
+import scala.annotation.tailrec
+
 object _1 extends App[Int] with StreamUtils {
 
   override def process(input: Stream[IO, Byte]): Stream[IO, Int] = {
     input.through(toString)
-      .fold[List[String]](Nil)((l, e) => l ++ List(e))
+      .fold(List.empty[String])((l, e) => l ++ List(e))
       .map(l => rec(l))
   }
 
-  def rec(elements: List[String], visited: Set[Int] = Set(), i: Int = 0, acc: Int = 0): Int = {
+  @tailrec def rec(elements: List[String], visited: Set[Int] = Set(), i: Int = 0, acc: Int = 0): Int = {
     if(visited.contains(i)) {
       acc
     } else {

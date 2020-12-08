@@ -4,6 +4,8 @@ import cats.effect.IO
 import common.{App, StreamUtils}
 import fs2.Stream
 
+import scala.annotation.tailrec
+
 object _2 extends App[Int] with StreamUtils {
 
   override def process(input: Stream[IO, Byte]): Stream[IO, Int] = {
@@ -22,19 +24,16 @@ object _2 extends App[Int] with StreamUtils {
         } ++
         lines.drop(i + 1)
       ).map(_._1)
-        .fold[List[String]](Nil)((l, e) => l ++ List(e))
-        .map(l => rec(l))
-        .filter(_.isDefined)
-        .map(_.get)
+      .fold(List.empty[String])((l, e) => l ++ List(e))
+      .flatMap(l => rec(l))
     }
   }
 
-  def rec(elements: List[String], visited: Set[Int] = Set(), i: Int = 0, acc: Int = 0): Option[Int]
-  = {
+  @tailrec def rec(elements: List[String], visited: Set[Int] = Set(), i: Int = 0, acc: Int = 0): Stream[IO, Int] = {
     if(visited.contains(i)) {
-      None
+      Stream.empty
     } else if(i == elements.size) {
-      Some(acc)
+      Stream.emit(acc)
     } else {
       elements(i).split(" ") match {
         case Array("nop", _) => rec(elements, visited + i, i + 1, acc)
